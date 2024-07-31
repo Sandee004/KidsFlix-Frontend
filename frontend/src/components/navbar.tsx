@@ -12,16 +12,32 @@ const Navbar = () => {
     };
     return (
         <>
-            <div className="bg-[#373b69] px-5 py-2 flex flex col justify-between items-center sm:px-8">
+            <div className="bg-[#373b69] px-5 py-2 flex flex-row justify-between items-center sm:px-8">
                 <p className="text-2xl font-bold text-white">KidsFlix</p>
-                <input
-                    className="hidden sm:block rounded-sm bg-transparent px-5 py-1 border-2 border-[#22254b] font-sm text-white italic focus:outline-0 focus:bg-[#22254b] focus:border-slate-500 sm:w-[320px]"
-                    placeholder="Search"
-                />
-                <button>
+
+                <div className="hidden px-5 py-1 w-2/5 sm:flex flex-row justify-between items-center gap-5 font-sm text-white italic">
+                    <a>
+                        <Link className="hover:font-bold" to="/">
+                            Home
+                        </Link>
+                    </a>
+                    <a>
+                        <Link className="hover:font-bold" to="/favourites">
+                            Favourites
+                        </Link>
+                    </a>
+                    <a>
+                        <Link to="/login">
+                            <button className="bg-red-400 px-4 py-1 w-fit rounded-sm hover:bg-red-600 hover:font-bold">
+                                Login
+                            </button>
+                        </Link>
+                    </a>
+                </div>
+                <button className="sm:hidden">
                     <FontAwesomeIcon
                         icon={faBars}
-                        className="sm:hidden text-white text-xl"
+                        className="text-white text-xl"
                         onClick={openMenu}
                     />
                 </button>
