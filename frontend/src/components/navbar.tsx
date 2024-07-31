@@ -27,21 +27,20 @@ const Navbar = () => {
                 </button>
             </div>
             <div
-                className={`bg-gray-300 flex flex-col pl-8 py-4 ${
+                className={`bg-slate-300 flex flex-col pl-8 py-4 ${
                     menuOpen ? "block" : "hidden"
                 }`}>
                 <Link className="py-1 hover:font-bold w-[80%]" to="/">
                     Home
                 </Link>
-                <Link className="py-1 hover:font-bold w-[80%]" to="/profile">
-                    Profile
-                </Link>
                 <Link className="py-1 hover:font-bold w-[80%]" to="/favourites">
                     Favourites
                 </Link>
-                <button className="bg-red-400 px-4 py-1 mt-1 mb-5 w-fit rounded-sm hover:bg-red-600 hover:font-bold">
-                    Logout
-                </button>
+                <Link to="/login">
+                    <button className="bg-red-400 px-4 py-1 mt-1 mb-5 w-fit rounded-sm hover:bg-red-600 hover:font-bold">
+                        Login
+                    </button>
+                </Link>
             </div>
         </>
     );

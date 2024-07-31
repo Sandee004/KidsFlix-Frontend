@@ -107,7 +107,11 @@ const MovieComponent = ({ movieList, addFavourite }: Props) => {
             addFavourite(updatedMovieList);
         } catch (error) {
             console.error("Error handling favourite: ", error);
-            alert("Failed to add favourite. Please try again");
+            if (error instanceof Response && error.status === 422) {
+                setShowLoginModal(true);
+            } else {
+                alert("Failed to add favourite. Please try again");
+            }
         }
     };
 
@@ -121,7 +125,7 @@ const MovieComponent = ({ movieList, addFavourite }: Props) => {
             }
         );
 
-        if (response.status === 401) {
+        if (response.status === 401 || response.status === 422) {
             localStorage.removeItem("token");
             setShowLoginModal(true);
             return;
@@ -204,9 +208,9 @@ const MovieComponent = ({ movieList, addFavourite }: Props) => {
             {showLoginModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                     <div className="bg-white p-6 rounded-lg">
-                        <p>Please log in to add favorites.</p>
+                        <p>Please sign up to add favorites.</p>
                         <button
-                            onClick={() => navigate("/login")}
+                            onClick={() => navigate("/register")}
                             className="bg-blue-500 text-white px-4 py-2 rounded mt-4 mr-2">
                             Log In
                         </button>

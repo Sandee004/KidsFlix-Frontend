@@ -133,7 +133,7 @@ const MovieDetail = ({ movieList, addFavourite }: Props) => {
     return (
         <>
             <Navbar />
-            <div className="bg-white w-[85%] text-black mx-auto py-8 flex flex-col md:flex-row justify-center items-center px-8 gap-8 my-10">
+            <div className="bg-white w-[95%] text-black mx-auto py-8 flex flex-col md:flex-row justify-center items-center px-8 gap-8 my-8">
                 <div className="bg-red-400 w-[300px] h-[320px]">
                     <img
                         src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`}
@@ -147,7 +147,7 @@ const MovieDetail = ({ movieList, addFavourite }: Props) => {
                     </p>
                     <p>{movie.overview}</p>
                     <div className="my-5">
-                        <button className="hover:bg-red-600 bg-red-500 px-4 rounded-sm mr-5 py-1">
+                        <button className="hover:bg-red-600 bg-red-500 px-4 rounded-sm mb-3 mr-5 py-1">
                             Watch Now
                         </button>
                         <button

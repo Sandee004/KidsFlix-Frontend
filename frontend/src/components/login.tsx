@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const LoginPage = () => {
     const [username, setUsername] = useState("");
@@ -26,12 +26,11 @@ const LoginPage = () => {
             const response = await fetch(url, options);
             if (!response.ok) {
                 const errorData = await response.json();
-                const errorMessage = errorData.message || "Login failed";
-                alert(errorMessage);
+                const errorMessage = errorData.message || "Login failed"
+                    alert(errorMessage);
             } else {
                 const data = await response.json();
                 localStorage.setItem("token", data.access_token);
-                console.log(localStorage.getItem("token"));
                 navigate("/");
             }
         } catch (error) {
@@ -75,6 +74,13 @@ const LoginPage = () => {
                     Login
                 </button>
             </form>
+
+            <p className="mx-10 my-4">
+                Don't have an account?
+                <span className="text-[#373b69]">
+                    <Link to="/register">Sign Up</Link>
+                </span>
+            </p>
         </>
     );
 };

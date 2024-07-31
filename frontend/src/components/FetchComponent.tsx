@@ -71,7 +71,7 @@ const FetchComponent = () => {
     return (
         <>
             <Navbar />
-            <div className="bg-white mx-auto py-10 mt-10 w-[85%] items-center">
+            <div className="bg-white mx-auto py-10 mt-10 w-[95%] items-center">
                 <div className="w-[98%] flex px-2 mx-auto items-center">
                     <p className="bg-[#22254b] px-2 py-1 w-1/3 text-white text-sm overflow-hidden">
                         {isSearching ? "SEARCH RESULTS" : "RECENT MOVIES"}

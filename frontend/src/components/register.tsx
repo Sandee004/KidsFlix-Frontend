@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const RegisterPage = () => {
     const [username, setUsername] = useState("");
@@ -92,6 +92,13 @@ const RegisterPage = () => {
                     SignUp
                 </button>
             </form>
+
+            <p className="mx-10 my-4">
+                Already have an account?
+                <span className="text-[#373b69]">
+                    <Link to="/login">Sign Up</Link>
+                </span>
+            </p>
         </>
     );
 };
