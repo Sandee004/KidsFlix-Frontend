@@ -87,7 +87,7 @@ const RegisterPage = () => {
                 />
 
                 <button
-                    className="bg-[#373b69] text-white w-[80%] py-2 rounded-sm hover:bg-[#22254b] font-bold mt-2"
+                    className="bg-[#373b69] text-white w-[80%] sm:w-[60%] py-2 rounded-sm hover:bg-[#22254b] font-bold mt-2"
                     type="submit">
                     SignUp
                 </button>
@@ -96,7 +96,7 @@ const RegisterPage = () => {
             <p className="mx-10 my-4">
                 Already have an account?
                 <span className="text-[#373b69]">
-                    <Link to="/login">Sign Up</Link>
+                    <Link to="/login">Login</Link>
                 </span>
             </p>
         </>

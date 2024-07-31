@@ -212,7 +212,7 @@ const MovieComponent = ({ movieList, addFavourite }: Props) => {
                         <button
                             onClick={() => navigate("/register")}
                             className="bg-blue-500 text-white px-4 py-2 rounded mt-4 mr-2">
-                            Log In
+                            Sign Up
                         </button>
                         <button
                             onClick={() => setShowLoginModal(false)}
