@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import MovieComponent from "./singleMovie";
 import Navbar from "./navbar";
 import SearchComponent from "./search";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faCircleChevronLeft,
+    faCircleChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface Movie {
     title: string;
@@ -89,21 +94,25 @@ const FetchComponent = () => {
                         setMovieList(updatedMovieList)
                     }
                 />
+                {totalPages > 1 && (
+                    <div className="mx-auto text-3xl text-[#22254b] flex flex-row justify-between items-center w-[60%] gap-5">
+                        <button
+                            disabled={currentPage === 1}
+                            title="Previous Page"
+                            className="hover:cursor-pointer"
+                            onClick={() => handlePageChange(currentPage - 1)}>
+                            <FontAwesomeIcon icon={faCircleChevronLeft} />
+                        </button>
+                        <button
+                            disabled={currentPage === totalPages}
+                            title="Next Page"
+                            className="hover:cursor-pointer"
+                            onClick={() => handlePageChange(currentPage + 1)}>
+                            <FontAwesomeIcon icon={faCircleChevronRight} />
+                        </button>
+                    </div>
+                )}
             </div>
-            {totalPages > 1 && (
-                <div>
-                    <button
-                        disabled={currentPage === 1}
-                        onClick={() => handlePageChange(currentPage - 1)}>
-                        Previous Page
-                    </button>
-                    <button
-                        disabled={currentPage === totalPages}
-                        onClick={() => handlePageChange(currentPage + 1)}>
-                        Next Page
-                    </button>
-                </div>
-            )}
         </>
     );
 };
