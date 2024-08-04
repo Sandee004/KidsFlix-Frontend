@@ -17,21 +17,21 @@ interface Movie {
     id: number | string;
 }
 
-const MovieComponent = ({ movieList, addFavourite }: Props) => {
+const MovieComponent = ({ movieList }: Props) => {
     const navigate = useNavigate();
     const [showLoginModal, setShowLoginModal] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [favorites, setFavorites] = useState<(number | string)[]>([]);
     const [localMovieList, setLocalMovieList] = useState(movieList);
+    const API_BASE_URL = "https://kidsflix-backend.onrender.com/api";
 
     console.log(localMovieList);
 
     useEffect(() => {
         const fetchFavoritesAndUpdateMovies = async () => {
             const fetchedFavorites = await fetchFavorites();
-            if (fetchedFavorites) {
-                setFavorites(fetchedFavorites);
-                updateMovieListWithFavorites(fetchedFavorites);
-            }
+            setFavorites(fetchedFavorites);
+            updateMovieListWithFavorites(fetchedFavorites);
         };
 
         fetchFavoritesAndUpdateMovies();
@@ -42,6 +42,117 @@ const MovieComponent = ({ movieList, addFavourite }: Props) => {
     }, [movieList]);
 
     const updateMovieListWithFavorites = (favs: (number | string)[]) => {
+        setLocalMovieList((prevList) =>
+            prevList.map((movie) => ({
+                ...movie,
+                isLiked: favs.includes(movie.id),
+            }))
+        );
+    };
+
+    const fetchWithAuth = async (
+        url: string,
+        options: RequestInit = {},
+        showModalOnError: boolean = true
+    ) => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            if (showModalOnError) setShowLoginModal(true);
+            throw new Error("No token found");
+        }
+
+        const response = await fetch(`${API_BASE_URL}${url}`, {
+            ...options,
+            headers: {
+                ...options.headers,
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (response.status === 401 || response.status === 422) {
+            localStorage.removeItem("token");
+            setShowLoginModal(true);
+            throw new Error("Invalid token");
+        }
+
+        if (!response.ok) {
+            throw new Error(`Request failed with status ${response.status}`);
+        }
+
+        return response;
+    };
+
+    const fetchFavorites = async (showModalOnError: boolean = false) => {
+        try {
+            const response = await fetchWithAuth(
+                "/favourites",
+                {},
+                showModalOnError
+            );
+            const favoritesData = await response.json();
+            return favoritesData.map((fav: any) => fav.movie_id);
+        } catch (error) {
+            console.error("Error fetching favorites:", error);
+            return [];
+        }
+    };
+
+    const handleFavouriteClick = async (movie: Movie) => {
+        setIsLoading(true);
+        try {
+            const result = await toogleFavourite(movie);
+            const newFavorites =
+                result.action === "added"
+                    ? [...favorites, movie.id]
+                    : favorites.filter((id) => id !== movie.id);
+
+            setFavorites(newFavorites);
+
+            setLocalMovieList((prevList) =>
+                prevList.map((m) => ({
+                    ...m,
+                    isLiked:
+                        m.id === movie.id
+                            ? result.action === "added"
+                            : m.isLiked,
+                }))
+            );
+        } catch (error) {
+            console.error("Error handling favourite: ", error);
+            if (error instanceof Error && error.message === "No token found") {
+                setShowLoginModal(true);
+            } else if (
+                error instanceof Error &&
+                error.message === "Invalid token"
+            ) {
+                setShowLoginModal(true);
+            } else {
+                alert("Failed to add favourite. Please try again");
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const toogleFavourite = async (movie: Movie) => {
+        const response = await fetchWithAuth(
+            "/toogle_favourites",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    movie_id: movie.id,
+                    title: movie.title,
+                }),
+            },
+            true
+        );
+
+        return await response.json();
+    };
+    /*   const updateMovieListWithFavorites = (favs: (number | string)[]) => {
         setLocalMovieList((prevList) =>
             prevList.map((movie) => ({
                 ...movie,
@@ -159,6 +270,8 @@ const MovieComponent = ({ movieList, addFavourite }: Props) => {
 
         return await response.json();
     };
+
+    */
     const heartPopAnimation = {
         scale: [1],
         transition: { duration: 0.2 },
@@ -206,7 +319,7 @@ const MovieComponent = ({ movieList, addFavourite }: Props) => {
             </div>
 
             {showLoginModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-51">
                     <div className="bg-white p-6 rounded-lg">
                         <p>Please sign up to add favorites.</p>
                         <button
@@ -220,6 +333,12 @@ const MovieComponent = ({ movieList, addFavourite }: Props) => {
                             Close
                         </button>
                     </div>
+                </div>
+            )}
+
+            {isLoading && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-white"></div>
                 </div>
             )}
         </>

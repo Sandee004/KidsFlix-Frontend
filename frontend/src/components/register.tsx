@@ -2,12 +2,14 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 const RegisterPage = () => {
+    const [isLoading, setIsLoading] = useState(false);
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const navigate = useNavigate();
 
     const submitForm = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsLoading(true);
 
         const data = {
             username,
@@ -27,6 +29,7 @@ const RegisterPage = () => {
             if (!response.ok) {
                 const error = await response.json();
                 const errorMessage = error.message || "Signup failed";
+                setIsLoading(false);
                 alert(errorMessage);
                 return;
             }
@@ -55,6 +58,8 @@ const RegisterPage = () => {
         } catch (error) {
             console.error("Error submitting signup:", error);
             alert("An unexpected error occurred. Please try again later.");
+        } finally {
+            setIsLoading(false);
         }
     };
     return (
@@ -93,12 +98,18 @@ const RegisterPage = () => {
                 </button>
             </form>
 
-            <p className="mx-10 my-4">
+            <p className="my-4 text-center">
                 Already have an account?
                 <span className="text-[#373b69]">
                     <Link to="/login">Login</Link>
                 </span>
             </p>
+
+            {isLoading && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-white"></div>
+                </div>
+            )}
         </>
     );
 };
