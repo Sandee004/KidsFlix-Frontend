@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "./navbar";
+import WatchNowButton from "./watch";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -147,9 +148,10 @@ const MovieDetail = ({ movieList, addFavourite }: Props) => {
                     </p>
                     <p>{movie.overview}</p>
                     <div className="my-5">
-                        <button className="hover:bg-red-600 bg-red-500 px-4 rounded-sm mb-3 mr-5 py-1">
-                            Watch Now
-                        </button>
+                        <WatchNowButton
+                            movieId={movie.id}
+                            title={movie.title}
+                        />
                         <button
                             onClick={() => handleFavouriteClick(movie)}
                             className="hover:bg-slate-400 bg-slate-300 rounded-sm px-2 py-1 text-black">
